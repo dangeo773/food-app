@@ -32,10 +32,67 @@ import {
 
 import { styles } from './HomePage.styles';
 
+export class Recipe {
+  name: string = '';
+  carbs: string = '';
+  protein: string = '';
+  fat: string = '';
+  calories: number = 0;
+  prep_time: number = 0;
+  url: string = '';
+}
+
 export function HomePage({ navigation }: any) {
   const auth = getAuth();
 
   const currentUserId = auth.currentUser!.uid;
+
+  const parseRecipes = async(response: JSON) => {
+    // console.log(JSON.stringify(response));
+    let recipes: Recipe[] = [];
+    for (const result of response.results) {
+      // console.log(JSON.stringify(result));
+      var recipe = new Recipe();
+      recipe.name = result.title;
+      recipe.prep_time = result.readyInMinutes;
+      let servings = result.servings;
+      let nutrients = result.nutrition.nutrients;
+      recipe.url = result.spoonacularSourceUrl;
+      for (const nutrient of nutrients) {
+        if (nutrient.name === "Calories") {
+          recipe.calories = Math.floor(nutrient.amount/servings);
+        } else if (nutrient.name === "Carbohydrates") {
+          recipe.carbs = (nutrient.amount/servings).toFixed(2);
+        } else if (nutrient.name === "Fat") {
+          recipe.fat = (nutrient.amount/servings).toFixed(2);
+        } else if (nutrient.name === "Protein") {
+          recipe.protein = (nutrient.amount/servings).toFixed(2);
+        }
+      }
+      recipes.push(recipe);
+    }
+    console.log(recipes)
+  }
+
+  const getRecipes = async () => {
+    const response = await fetch('https://api.spoonacular.com/recipes/complexSearch?' + new URLSearchParams({
+      diet: 'vegetarian',
+      intolerances: '',
+      includeIngredients: 'tomato,corn,onion,avacado,cilantro',
+      addRecipeNutrition: 'true',
+      ignorePantry: 'true',
+      sort: 'meta-score',
+      sortDirection: 'desc',
+      maxCarbs: '10000',
+      ranking: '2',
+      minProtein: '0',
+      number: '10',
+      apiKey: '348fb7169b9143e387b7404377bc6b0e',
+    }))
+    .then(response => response.json())
+    .then(result => parseRecipes(result))
+    .catch(error => console.log('error', error));
+  };
 
   // should we just make a custom appbar header? and then put it in the navigation screen options?
   // https://callstack.github.io/react-native-paper/integrate-app-bar-with-react-navigation.html
@@ -49,6 +106,9 @@ export function HomePage({ navigation }: any) {
 
       <View>
         <Text style={{ color: '#EAA309' }}>Hello</Text>
+        <Button icon="camera" mode="contained" onPress={() => getRecipes()}>
+          Press me
+        </Button>
       </View>
     </View>
   );
