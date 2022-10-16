@@ -15,11 +15,11 @@ export function RootStackScreen() {
   const options = { headerShown: false };
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="FeedScreen">
+      <RootStack.Navigator initialRouteName="HomePage">
         <RootStack.Screen
-          name="FeedScreen"
+          name="HomePage"
           options={options}
-          component={FeedScreen}
+          component={HomePage}
         />
         <RootStack.Screen
           name="NewFoodScreen"
