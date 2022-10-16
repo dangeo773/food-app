@@ -21,11 +21,6 @@ export function RootStackScreen() {
           options={options}
           component={HomePage}
         />
-        <RootStack.Screen
-          name="NewFoodScreen"
-          options={options}
-          component={NewFoodScreen}
-        />
       </RootStack.Navigator>
     </NavigationContainer>
   );
