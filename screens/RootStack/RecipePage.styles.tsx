@@ -27,16 +27,33 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    color: "black",
   },
-  
-  add:{
-    icon: "plus" ,
-    color: "black", 
-    mode: "contained",
+  recipename: {
+    fontSize: 32,
+    textAlign: "center"  
   },
-
   delete:{
-    backgroundColor: "transparent",
+    marginTop: 20,
+    height: 10,
+    justifyContent: "center"
+  },
+  generate:{
+    marginTop: 20,
+    height: 10,
+    justifyContent: "center"
+  },
+  back: {
+    position: 'absolute',
+    left: 5,
+    top: 5,
+     // add if dont work with above
+  },
+  macro: {
+    fontSize: 20,
+    justifyContent: "center"
+  },
+  b4: {
+    fontSize: 15,
+    textAlign: "center"
   }
 });

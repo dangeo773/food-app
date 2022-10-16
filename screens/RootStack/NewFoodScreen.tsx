@@ -114,15 +114,6 @@ export function NewFoodScreen({ navigation }) {
     setImageButtonText('CHANGE IMAGE');
   };
 
-  const Bar = () => {
-    return (
-      <Appbar.Header style = {{backgroundColor: "#ffffff"}}>
-        <Appbar.Action onPress={navigation.goBack} icon="chevron-left" />
-        <Appbar.Content  title="Post Your Food" />
-      </Appbar.Header>
-    );
-  };
-
 
 
 
@@ -132,7 +123,6 @@ export function NewFoodScreen({ navigation }) {
 
   return (
     <>
-      <Bar />
       <View style={{flex: 1, backgroundColor: '#333333', padding: 20 }}>
       <TextInput style={{marginTop: 30, backgroundColor: "#ffffff"}}  label="Food Name" value={foodName} onChangeText={text => setFoodName(text) }/>
       <TextInput style={{marginTop: 16, backgroundColor: "#ffffff"}}  label="Food Link" value={foodLink} onChangeText={text => setFoodLink(text)}/>

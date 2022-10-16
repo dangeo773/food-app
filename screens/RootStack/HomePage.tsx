@@ -11,6 +11,18 @@ import {
   Platform,
 } from 'react-native';
 
+
+export class Recipe {
+  name: string = '';
+  carbs: string = '';
+  protein: string = '';
+  fat: string = '';
+  calories: number = 0;
+  prep_time: number = 0;
+  url: string = '';
+  image_url: string = '';
+}
+
 // import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from 'firebase/auth';
 import {
@@ -50,24 +62,25 @@ import { styles } from './HomePage.styles';
 export function HomePage({ navigation }: any) {
   const auth = getAuth();
   const items = [{
+    id: 'vegan',
     item: 'Vegan'
   }, {
-    id: 'a0s0a8ssbsd',
+    id: 'vegetarian',
     item: 'Vegetarian'
   }, {
-    id: '16hbajsabsd',
-    item: 'Gluten-Free'
+    id: 'Gluten',
+    item: 'Gluten Free'
   }, {
-    id: 'nahs75a5sg',
-    item: 'Low Calorie'
+    id: 'carbs',
+    item: 'Low-Carb'
   }, {
-    id: '667atsas',
+    id: 'protein',
     item: 'High Protein'
   }, {
-    id: 'hsyasajs',
-    item: 'Lactose'
+    id: 'Lactose',
+    item: 'Lactose Free'
   }, {
-    id: 'djsjudksjd',
+    id: 'peanut',
     item: 'Peanut-Free'
   }
 ];
@@ -79,22 +92,23 @@ export function HomePage({ navigation }: any) {
   const [snackBarText, setSnackBarText] = useState('');
   const [selectedId, setSelectedId] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState({});
+  // const [selectedFilter, setSelectedFilter] = useState({});
 
   
-  const Item = ({ title }) => (
+  const Item = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-      <Button onPress = {() => deleteIngredient(title)} style={styles.delete} mode="text">Delete</Button>
+      <Text style={styles.title}>{item}</Text>
+      <Button onPress = {() => deleteIngredient(item)} style={styles.delete} mode="text">Delete</Button>
       
         
   
     </View>
   );
 
-  const renderItem = ({ item }) => (
-    <Item title={item.title} />
-  );
+  const renderItem = ({ item }: { item: string }) => {
+    console.log(item)
+    return <Item title={item} />
+  };
 
   useEffect(() => {
     let dbIngredients = [];
@@ -134,14 +148,78 @@ export function HomePage({ navigation }: any) {
 
   };
 
+  const parseRecipes = async(response: JSON) => {
+    let recipes: Recipe[] = [];
+    for (const result of response.results) {
+      console.log(JSON.stringify(result));
+      var recipe = new Recipe();
+      recipe.name = result.title;
+      recipe.prep_time = result.readyInMinutes;
+      let nutrients = result.nutrition.nutrients;
+      recipe.url = result.sourceUrl;
+      recipe.image_url = result.image;
+      for (const nutrient of nutrients) {
+        if (nutrient.name === "Calories") {
+          recipe.calories = nutrient.amount;
+        } else if (nutrient.name === "Carbohydrates") {
+          recipe.carbs = nutrient.amount.toString();
+        } else if (nutrient.name === "Fat") {
+          recipe.fat = nutrient.amount.toString();
+        } else if (nutrient.name === "Protein") {
+          recipe.protein = nutrient.amount.toString();
+        }
+      }
+      recipes.push(recipe);
+    }
+    navigation.navigate("RecipePage", {recipes: recipes});
+    // console.log(recipes);
+  }
+
+  const getRecipes = async () => {
+    let diet = '';
+    let intols = '';
+    let carbs = 10000;
+    let protein = 0;
+    for (const filter of selectedFilters) {
+      if (["Vegan", "Vegetarian", "Gluten Free"].includes(filter.item)) {
+        diet = filter.item;
+      } else if (filter.id === "Gluten") {
+        intols = intols + "Gluten,"
+      } else if (filter.id === "Lactose") {
+        intols = intols + "Lactose,"
+      } else if (filter.id === "carbs") {
+        carbs = 40;
+      } else if (filter.id === "protein") {
+        protein = 25;
+      }
+    }
+    const response = await fetch('https://api.spoonacular.com/recipes/complexSearch?' + new URLSearchParams({
+      diet: diet,
+      intolerances: intols,
+      includeIngredients: ingredients.join(),
+      addRecipeNutrition: 'true',
+      ignorePantry: 'true',
+      sort: 'meta-score',
+      sortDirection: 'desc',
+      maxCarbs: carbs.toString(),
+      ranking: '2',
+      minProtein: protein.toString(),
+      number: '10',
+      apiKey: 'f517e7e9336a46fbba025408c4976fa7',
+    }))
+    .then(response => response.json())
+    .then(result => parseRecipes(result))
+    .catch(error => console.log('error', error));
+  };
+
 
   function onMultiChange() {
     return (item) => setSelectedFilters(xorBy(selectedFilters, [item], 'id'))
   }
 
-  function onChange() {
-    return (val) => setSelectedFilter(val)
-  }
+  // function onChange() {
+  //   return (val) => setSelectedFilter(val)
+  // }
   // should we just make a custom appbar header? and then put it in the navigation screen options?
   // https://callstack.github.io/react-native-paper/integrate-app-bar-with-react-navigation.html
 
@@ -173,7 +251,7 @@ export function HomePage({ navigation }: any) {
         
       </View>
       <View>
-        <Button color="green" mode="contained">Generate Recipes</Button>
+        <Button color="green" mode="contained" onPress={getRecipes}>Generate Recipes</Button>
       </View>
       <View>
         <FlatList

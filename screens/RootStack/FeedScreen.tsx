@@ -99,19 +99,9 @@ export function FeedScreen({ navigation }) {
 
 
 
-  const NavigationBar = () => {
-    // TODO: Return an AppBar, with a title & a Plus Action Item that goes to the NewSocialScreen.
-    return (
-      <Appbar.Header style ={{backgroundColor: "#ffffff"}}>
-        <Appbar.Content title="Friend's Food" />
-        <Appbar.Action icon="plus" onPress={() => {navigation.navigate('NewFoodScreen')}} />
-      </Appbar.Header>
-    );
-  };
 
   return (
     <>
-      <NavigationBar />
       <View style={{flex: 1, backgroundColor: '#333333'}}>
       <FlatList
         data={myList}
