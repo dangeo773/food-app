@@ -40,6 +40,7 @@ export class Recipe {
   calories: number = 0;
   prep_time: number = 0;
   url: string = '';
+  image_url: string = '';
 }
 
 export function HomePage({ navigation }: any) {
@@ -51,13 +52,14 @@ export function HomePage({ navigation }: any) {
     // console.log(JSON.stringify(response));
     let recipes: Recipe[] = [];
     for (const result of response.results) {
-      // console.log(JSON.stringify(result));
+      console.log(JSON.stringify(result));
       var recipe = new Recipe();
       recipe.name = result.title;
       recipe.prep_time = result.readyInMinutes;
       let servings = result.servings;
       let nutrients = result.nutrition.nutrients;
-      recipe.url = result.spoonacularSourceUrl;
+      recipe.url = result.sourceUrl;
+      recipe.image_url = result.image;
       for (const nutrient of nutrients) {
         if (nutrient.name === "Calories") {
           recipe.calories = Math.floor(nutrient.amount/servings);
