@@ -46,6 +46,16 @@ import { xorBy } from 'lodash';
 import { styles } from './HomePage.styles';
 
 
+export class Recipe {
+  name: string = '';
+  carbs: string = '';
+  protein: string = '';
+  fat: string = '';
+  calories: number = 0;
+  prep_time: number = 0;
+  url: string = '';
+}
+
 export function HomePage({ navigation }: any) {
   const auth = getAuth();
   const items = [{
