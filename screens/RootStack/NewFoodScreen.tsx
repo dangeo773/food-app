@@ -123,12 +123,12 @@ export function NewFoodScreen({ navigation }) {
 
   return (
     <>
-      <View style={{flex: 1, backgroundColor: '#333333', padding: 20 }}>
+      <View style={{flex: 1, backgroundColor: '#ffffff', padding: 20 }}>
       <TextInput style={{marginTop: 30, backgroundColor: "#ffffff"}}  label="Food Name" value={foodName} onChangeText={text => setFoodName(text) }/>
       <TextInput style={{marginTop: 16, backgroundColor: "#ffffff"}}  label="Food Link" value={foodLink} onChangeText={text => setFoodLink(text)}/>
       <TextInput style={{marginTop: 16, backgroundColor: "#ffffff"}}  label="Food Description" value={foodDescription} onChangeText={text => setFoodDescription(text)}/>
-      <Button style={{marginTop: 20, height: 50, justifyContent: 'center'}}  mode = "outlined" onPress={pickImage}> {imageButtonText} </Button>
-      <Button labelStyle={{ color: "black" }} style={{marginTop: 20, height: 50, justifyContent: 'center'}}   loading = {loading} mode = "contained" onPress={saveEvent}> SAVE EVENT </Button>
+      <Button style={{marginTop: 20, height: 50, justifyContent: 'center'}} color='#70104a' mode = "outlined" onPress={pickImage}> {imageButtonText} </Button>
+      <Button labelStyle={{ color: "white" }} style={{marginTop: 20, height: 50, justifyContent: 'center'}} color='#70104a'  loading = {loading} mode = "contained" onPress={saveEvent}> SAVE EVENT </Button>
     <Snackbar visible={visible} onDismiss={onDismissSnackBar}> Please fill out all fields! </Snackbar>
       </View>
     </>

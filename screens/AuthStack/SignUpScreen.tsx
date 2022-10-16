@@ -72,7 +72,7 @@ export default function SignUpScreen({ navigation, route }) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}> Welcome to Locker Room! </Text>
+        <Text style={styles.title}> Welcome to Recipify! </Text>
         <Text style={styles.subTitle}> Create An Account </Text>
         <TextInput
           placeholder="Enter Email"
@@ -90,7 +90,7 @@ export default function SignUpScreen({ navigation, route }) {
         <Button
           mode="contained"
           style={styles.boldButton}
-          labelStyle={{ color: 'black' }}
+          labelStyle={{ color: 'white' }}
           onPress={createUser}
           loading={loading}
         >

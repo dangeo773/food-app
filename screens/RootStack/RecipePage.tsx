@@ -38,7 +38,7 @@ export function RecipePage({ navigation, route }: any) {
         borderColor:"#000000",
         padding: 20
     }}>
-    <Card containerStyle = {{borderRadius: 10}}>
+    <Card containerStyle = {styles.input}>
    <Card.Cover source={{ uri: item.image_url }} />
      <Card.Content style={{  padding: 10 }}>
       <Title style={styles.h1}>{item.name}</Title>
@@ -57,13 +57,7 @@ export function RecipePage({ navigation, route }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Appbar.Header style={{ backgroundColor: 'black' }}>
-        <Appbar.Content title="Recipes" />
-        <Appbar.Action icon="bell" />
-      </Appbar.Header>
-      <Button onPress = {() => navigation.navigate("HomePage")} style={styles.back}>
-        Back
-        </Button>
+
       <View>
         <FlatList
           data={recipes}

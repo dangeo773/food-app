@@ -106,7 +106,7 @@ export default function SignInScreen({ navigation }) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}> Welcome to Locker Room! </Text>
+        <Text style={styles.title}> Welcome to Recipify! </Text>
         <Text style={styles.subTitle}> Sign In </Text>
         <TextInput
           style={styles.input}
@@ -133,7 +133,7 @@ export default function SignInScreen({ navigation }) {
         <Button
           mode="contained"
           style={styles.boldButton}
-          labelStyle={{ color: 'black' }}
+          labelStyle={{ color: 'white' }}
           loading={loading}
           onPress={signIn}
         >
@@ -143,7 +143,7 @@ export default function SignInScreen({ navigation }) {
         <Button
           mode="contained"
           style={styles.fillButton}
-          labelStyle={{ color: '#EAA309' }}
+          labelStyle={{ color: '#ffffff' }}
           onPress={() => navigation.navigate('SignUpScreen')}
         >
           Create An Account

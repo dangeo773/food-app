@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   ...AppStyles,
   title: {
     marginTop: 120,
-    color: '#EAA309',
+    color: '#70104a',
     fontWeight: 'bold',
     fontSize: 25,
     textAlign: 'center',
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   },
   fillButton: {
     backgroundColor: '#000000',
-    borderColor: '#EAA309',
+    borderColor: '#70104a',
     width: 230,
     height: 60,
     marginTop: 40,
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     alignContent: 'center',
   },
   boldButton: {
-    backgroundColor: '#EAA309',
+    backgroundColor: '#70104a',
     width: 230,
     height: 60,
     marginTop: 40,
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderColor: '#EAA309',
+    borderColor: '#70104a',
     borderWidth: 2,
     borderRadius: 15,
     fontSize: 16,

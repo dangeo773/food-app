@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, Text } from "react-native";
-import { Appbar, Card, Title, Paragraph } from "react-native-paper";
+import { Appbar, Card, Title, Paragraph, Button } from "react-native-paper";
 import { doc, onSnapshot, collection, getDocs, getFirestore } from "firebase/firestore";
 import {getStorage, ref, getDownloadURL} from "firebase/storage";
 import firebase from "firebase/app";
@@ -77,16 +77,16 @@ export function FeedScreen({ navigation }) {
     <View 
     style={{
         borderWidth:2,
-        borderColor:"#000000",
+        borderColor:"#dddddd",
      padding: 20
     }}
 >
-   <Card containerStyle = {{borderRadius: 10}}>
-   <Card.Cover source={{ uri: item.foodImage }} />
+   <Card containerStyle = {{borderRadius: 10, backgroundColor: '#ffffff'}}>
+   <Card.Cover source={{ uri: item.foodImage }} style= {{borderColor: "#70104a", borderWidth: 3}}/>
      <Card.Content style={{  padding: 10 }}>
       <Title style={styles.h1}>{item.foodName}</Title>
       <Title style={styles.h2}>{item.foodDescription}</Title>
-      <Title style={styles.body}>{item.foodLink}</Title>
+      <a href={item.foodLink}><Button>See recipe</Button></a>
       <Paragraph style={styles.body}>{"\u2022 " + getFormattedDate(date) +", " + formatAMPM(date)}</Paragraph>
 
     </Card.Content>
@@ -102,7 +102,7 @@ export function FeedScreen({ navigation }) {
 
   return (
     <>
-      <View style={{flex: 1, backgroundColor: '#333333'}}>
+      <View style={{flex: 1, backgroundColor: '#ffffff'}}>
       <FlatList
         data={myList}
         renderItem={renderItem}

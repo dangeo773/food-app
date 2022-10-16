@@ -95,18 +95,17 @@ export function HomePage({ navigation }: any) {
   // const [selectedFilter, setSelectedFilter] = useState({});
 
   
-  const Item = ({ item }) => (
+  const Item = ({ title }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{item}</Text>
-      <Button onPress = {() => deleteIngredient(item)} style={styles.delete} mode="text">Delete</Button>
-      
+      <Text style={styles.small}>{title}</Text>
+      <IconButton icon="delete-forever" color="#70104a" size={40} animated={true}  onPress = {() => deleteIngredient(title)}/>
         
   
     </View>
   );
 
   const renderItem = ({ item }: { item: string }) => {
-    console.log(item)
+
     return <Item title={item} />
   };
 
@@ -225,9 +224,7 @@ export function HomePage({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Appbar.Header style={{ backgroundColor: 'black' }}>
-        <Appbar.Content title="My Ingredients" />
-      </Appbar.Header>
+      
     
       <View style={{ width: '80%', alignItems: 'center' }}>
       <SelectBox 
@@ -246,12 +243,12 @@ export function HomePage({ navigation }: any) {
           value={ingredient}
           onChangeText={(name) => setIngredient(name)}
         />
-         <Button style = {styles.add} onPress={addIngredient}/>
+         <IconButton style={styles.add}icon="plus-box-outline" color="#70104a" size={40} animated={true}  onPress={addIngredient}/>
 
         
       </View>
       <View>
-        <Button color="green" mode="contained" onPress={getRecipes}>Generate Recipes</Button>
+      <Button style={styles.generate} mode="contained" color = "#70104a" onPress={getRecipes}>Generate Recipes</Button>
       </View>
       <View>
         <FlatList
