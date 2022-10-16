@@ -39,6 +39,7 @@ import {
   Modal,
   RadioButton,
   Snackbar,
+  IconButton
 } from 'react-native-paper';
 import MultiSelect from 'react-native-multiple-select';
 import SelectBox from 'react-native-multi-selectbox';
@@ -49,7 +50,6 @@ import { styles } from './HomePage.styles';
 export function HomePage({ navigation }: any) {
   const auth = getAuth();
   const items = [{
-    id: '92iijs7yta',
     item: 'Vegan'
   }, {
     id: 'a0s0a8ssbsd',
@@ -72,32 +72,8 @@ export function HomePage({ navigation }: any) {
   }
 ];
   const currentUserId = auth.currentUser!.uid;
-  const [ingredients, setIngredients] = useState([
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'Apple',
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Banana',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Strawberries',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571r29d72',
-      title: 'Chicken Breast',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-14535ree29d72',
-      title: 'Orange',
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-1e29d72',
-      title: 'Fermented Horse Cum',
-    },
-  ]);
+  const db = getFirestore();
+  const [ingredients, setIngredients] = useState([]);
   const [ingredient, setIngredient] = useState('');
   const [visible, setVisible] = useState(false);
   const [snackBarText, setSnackBarText] = useState('');
@@ -109,15 +85,54 @@ export function HomePage({ navigation }: any) {
   const Item = ({ title }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
-      <Button style={styles.delete} mode="text">Delete</Button>
+      <Button onPress = {() => deleteIngredient(title)} style={styles.delete} mode="text">Delete</Button>
       
         
   
     </View>
   );
+
   const renderItem = ({ item }) => (
     <Item title={item.title} />
   );
+
+  useEffect(() => {
+    let dbIngredients = [];
+    const unsub = onSnapshot(doc(db, "users", currentUserId), (doc) => {
+      console.log("Current data: ", doc.data());
+      dbIngredients = doc.data().ingredients;
+      setIngredients(dbIngredients);
+    });
+    return unsub;
+}, [db]);
+
+
+
+  const addIngredient = async () => {
+    const peopleCollection = collection(db, "users");
+    const peopleRef = doc(peopleCollection, currentUserId);
+    const docSnap = await getDoc(peopleRef);
+    let currentIngredients = docSnap.data().ingredients;
+    currentIngredients.push(ingredient);
+    await updateDoc(doc(db, "users", currentUserId) , { ingredients: currentIngredients });
+
+  };
+
+  const deleteIngredient = async (ingredient) => {
+    const peopleCollection = collection(db, "users");
+    const peopleRef = doc(peopleCollection, currentUserId);
+    const docSnap = await getDoc(peopleRef);
+    let currentIngredients = docSnap.data().ingredients;
+    let index = 0;
+    for(let i = 0; i < currentIngredients.length; i++) {
+      if (currentIngredients[i] === ingredient){
+          index = i;
+      }
+    }
+    currentIngredients.splice(index, 1)
+    await updateDoc(doc(db, "users", currentUserId) , { ingredients: currentIngredients });
+
+  };
 
 
   function onMultiChange() {
@@ -133,8 +148,7 @@ export function HomePage({ navigation }: any) {
   return (
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={{ backgroundColor: 'black' }}>
-        <Appbar.Content title="My Pantry" />
-        <Appbar.Action icon="bell" />
+        <Appbar.Content title="My Ingredients" />
       </Appbar.Header>
     
       <View style={{ width: '80%', alignItems: 'center' }}>
@@ -146,21 +160,26 @@ export function HomePage({ navigation }: any) {
           onTapClose={onMultiChange()}
           isMulti
         />
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
       <TextInput
           style={styles.input}
           placeholder="Add Ingredient"
           value={ingredient}
           onChangeText={(name) => setIngredient(name)}
         />
+         <Button style = {styles.add} onPress={addIngredient}/>
+
+        
       </View>
       <View>
-        <Button color="green" style={styles.delete} mode="filled">Generate Recipes</Button>
+        <Button color="green" mode="contained">Generate Recipes</Button>
       </View>
       <View>
         <FlatList
           data={ingredients}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item}
         />
       </View>
     </SafeAreaView>

@@ -28,4 +28,10 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  
+  add:{
+    icon: "plus" ,
+    color: "black", 
+    mode: "contained",
+  }
 });
