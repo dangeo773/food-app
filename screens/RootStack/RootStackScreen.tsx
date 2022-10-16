@@ -4,22 +4,27 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { HomePage } from './HomePage';
+import {FeedScreen} from './FeedScreen';
+import {NewFoodScreen} from './NewFoodScreen';
 
-export type RootStackParamList = {
-  HomePage: undefined;
-};
 
-const RootStack = createStackNavigator<RootStackParamList>();
+
+const RootStack = createStackNavigator();
 
 export function RootStackScreen() {
   const options = { headerShown: false };
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="HomePage">
+      <RootStack.Navigator initialRouteName="FeedScreen">
         <RootStack.Screen
-          name="HomePage"
+          name="FeedScreen"
           options={options}
-          component={HomePage}
+          component={FeedScreen}
+        />
+        <RootStack.Screen
+          name="NewFoodScreen"
+          options={options}
+          component={NewFoodScreen}
         />
       </RootStack.Navigator>
     </NavigationContainer>
