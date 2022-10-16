@@ -4,12 +4,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { HomePage } from './HomePage';
+import {FeedScreen} from './FeedScreen';
+import {NewFoodScreen} from './NewFoodScreen';
 
-export type RootStackParamList = {
-  HomePage: undefined;
-};
 
-const RootStack = createStackNavigator<RootStackParamList>();
+
+const RootStack = createStackNavigator();
 
 export function RootStackScreen() {
   const options = { headerShown: false };
@@ -20,6 +20,11 @@ export function RootStackScreen() {
           name="HomePage"
           options={options}
           component={HomePage}
+        />
+        <RootStack.Screen
+          name="NewFoodScreen"
+          options={options}
+          component={NewFoodScreen}
         />
       </RootStack.Navigator>
     </NavigationContainer>

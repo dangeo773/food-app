@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import 'firebase/firestore';
+import { getFirestore, collection, setDoc, query, onSnapshot, orderBy, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { Snackbar, Button, Appbar } from 'react-native-paper';
 
@@ -40,13 +40,18 @@ export default function SignUpScreen({ navigation, route }) {
 
   const onDismissSnackBar = () => setVisible(false);
 
-  const createUser = () => {
+  const createUser =  () => {
     setLoading(true);
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then(async () => {
         setLoading(false);
         console.log('User account created & signed in!');
+        const currentUserId = auth.currentUser!.uid;
+        const db = getFirestore();
+        const peopleCollection = collection(db, "users");
+        const peopleRef = doc(peopleCollection, currentUserId);
+        await setDoc(peopleRef, {uid: currentUserId, ingredients: []});
       })
       .catch((error) => {
         setLoading(false);
