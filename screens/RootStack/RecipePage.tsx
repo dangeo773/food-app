@@ -39,14 +39,17 @@ import {
   Modal,
   RadioButton,
   Snackbar,
+  IconButton,
 } from 'react-native-paper';
 import MultiSelect from 'react-native-multiple-select';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash';
-import { styles } from './HomePage.styles';
+import { styles } from './RecipePage.styles';
+import { createSubscribe } from '@firebase/util';
 
 
-export function HomePage({ navigation }: any) {
+
+export function RecipePage({ navigation }: any) {
   const auth = getAuth();
   const items = [{
     id: '92iijs7yta',
@@ -71,6 +74,23 @@ export function HomePage({ navigation }: any) {
     item: 'Peanut-Free'
   }
 ];
+  
+  const initial_recipes = [1, 2, 3, 4, 5, 6, 7,]
+  var dummy = []
+  for (var i=0; i<initial_recipes.length; i++){
+    dummy.push(
+        {
+            name: "cock",
+            carbs: "17",
+            protein: "200",
+            fat: "-123",
+            url: "https:/asiudyiosdu",
+            calories: 0,
+            prep_time: 0,
+        }
+    )
+  }
+
   const currentUserId = auth.currentUser!.uid;
   const [ingredients, setIngredients] = useState([
     {
@@ -98,7 +118,7 @@ export function HomePage({ navigation }: any) {
       title: 'Fermented Horse Cum',
     },
   ]);
-  const [ingredient, setIngredient] = useState('');
+  const [recipes, setRecipes] = useState(dummy);
   const [visible, setVisible] = useState(false);
   const [snackBarText, setSnackBarText] = useState('');
   const [selectedId, setSelectedId] = useState(null);
@@ -106,64 +126,53 @@ export function HomePage({ navigation }: any) {
   const [selectedFilter, setSelectedFilter] = useState({});
 
   
-  const Item = ({ title }) => (
+  
+  const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-      <Button style={styles.delete} mode="text">Delete</Button>
       
+      
+      <Text style={styles.recipename}>{item.name}
+      </Text>
+        <Text style={styles.macro}>
+            {"\nProtein: " + item.protein + "g Carbs: " + item.carbs + "g Fat: " + item.carbs + "g"}
+            
+        </Text>
+        <Text style={styles.b4}>
+            {"\nPrep Time: " + item.prep_time}
+            
+        </Text>
+
+      
+      <a href="http://google.com">
+      <Button style={styles.delete} mode="text">
+      link
+      </Button>
+      </a>
         
   
     </View>
+        
+    
+    
   );
-  const renderItem = ({ item }) => (
-    <Item title={item.title} />
-  );
 
 
-  function onMultiChange() {
-    return (item) => setSelectedFilters(xorBy(selectedFilters, [item], 'id'))
-  }
-
-  function onChange() {
-    return (val) => setSelectedFilter(val)
-  }
+  
   // should we just make a custom appbar header? and then put it in the navigation screen options?
   // https://callstack.github.io/react-native-paper/integrate-app-bar-with-react-navigation.html
 
   return (
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={{ backgroundColor: 'black' }}>
-        <Appbar.Content title="My Pantry" />
+        <Appbar.Content title="Recipes" />
         <Appbar.Action icon="bell" />
       </Appbar.Header>
-    
-      <View style={{ width: '80%', alignItems: 'center' }}>
-      <SelectBox 
-          label="Select multiple"
-          options={items}
-          selectedValues={selectedFilters}
-          onMultiSelect={onMultiChange()}
-          onTapClose={onMultiChange()}
-          isMulti
-        />
-      </View>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
-      <TextInput
-          style={styles.input}
-          placeholder="Add Ingredient"
-          value={ingredient}
-          onChangeText={(name) => setIngredient(name)}
-        />
-      <Button color="black" style={styles.delete} mode="filled">
-        Add
-      </Button>
-      </View>
-      <View>
-        <Button color="green" style={styles.delete} mode="filled">Generate Recipes</Button>
-      </View>
+      <Button style={styles.back}>
+        Back
+        </Button>
       <View>
         <FlatList
-          data={ingredients}
+          data={recipes}
           renderItem={renderItem}
           keyExtractor={item => item.id}
         />

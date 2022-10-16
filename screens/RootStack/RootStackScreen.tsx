@@ -3,10 +3,10 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { HomePage } from './HomePage';
+import { RecipePage } from './RecipePage';
 
 export type RootStackParamList = {
-  HomePage: undefined;
+  RecipePage: undefined;
 };
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -15,11 +15,11 @@ export function RootStackScreen() {
   const options = { headerShown: false };
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="HomePage">
+      <RootStack.Navigator initialRouteName="RecipePage">
         <RootStack.Screen
-          name="HomePage"
+          name="RecipePage"
           options={options}
-          component={HomePage}
+          component={RecipePage}
         />
       </RootStack.Navigator>
     </NavigationContainer>
